@@ -1,10 +1,66 @@
-﻿@model Drink
+﻿@model IEnumerable<BartenderApp.Models.Drink>
 
 @{
-    ViewData["Title"] = "Place Order";
+    ViewData["Title"] = "Menu";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Place Order</h1>
-</div>
+<h1>Menu</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var drink in Model)
+    {
+        <div class="drink-card" data-price="@drink.Price">
+            <div class="drink-name">@drink.Name</div>
+            <div class="drink-desc">@drink.Description</div>
+            <div class="drink-footer">
+                <span class="drink-price">$@drink.Price.ToString("0.00")</span>
+                <div class="drink-qty">
+                    <button onclick="changeQty(this, -1)"><i class="bi bi-dash-circle"></i></button>
+                    <span class="qty">0</span>
+                    <button onclick="changeQty(this, 1)"><i class="bi bi-plus-circle"></i></button>
+                </div>
+            </div>
+        </div>
+    }
+    </tbody>
+</table>
+
+<p>Total: <span id="order-total">$0.00</span></p>
+<p>Items: <span id="order-items">0</span></p>
+
+<script>
+    function changeQty(btn, delta) {
+        const card = btn.closest('.drink-card');
+        const qtySpan = card.querySelector('.qty');
+        let qty = parseInt(qtySpan.textContent) + delta;
+        if (qty < 0) qty = 0;
+        qtySpan.textContent = qty;
+        updateTotal();
+    }
+
+    function updateTotal() {
+        const cards = document.querySelectorAll('.drink-card');
+        let total = 0;
+        let itemCount = 0;
+
+        cards.forEach(card => {
+            const qty = parseInt(card.querySelector('.qty').textContent);
+            const price = parseFloat(card.dataset.price);
+            total += qty * price;
+            itemCount += qty;
+        });
+
+        document.getElementById('order-total').textContent = '$' + total.toFixed(2);
+        document.getElementById('order-items').textContent = itemCount;
+    }
+</script>
 

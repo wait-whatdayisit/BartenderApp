@@ -274,5 +274,5 @@ C:\Users\gblom\Documents\GitHub\BartenderApp\BartenderApp\BartenderApp\bin\Debug
 C:\Users\gblom\Documents\GitHub\BartenderApp\BartenderApp\BartenderApp\bin\Debug\net10.0\runtimes\win-arm\native\e_sqlite3.dll
 C:\Users\gblom\Documents\GitHub\BartenderApp\BartenderApp\BartenderApp\bin\Debug\net10.0\runtimes\win\lib\net9.0\System.Windows.Extensions.dll
 C:\Users\gblom\Documents\GitHub\BartenderApp\BartenderApp\BartenderApp\obj\Debug\net10.0\BartenderApp.csproj.AssemblyReference.cache
-C:\Users\gblom\Documents\GitHub\BartenderApp\BartenderApp\BartenderApp\obj\Debug\net10.0\compressed\o9mhlakm29-{0}-3y8m7uxm6z-3y8m7uxm6z.gz
 C:\Users\gblom\Documents\GitHub\BartenderApp\BartenderApp\BartenderApp\obj\Debug\net10.0\Bartende.D586D6FA.Up2Date
+C:\Users\gblom\Documents\GitHub\BartenderApp\BartenderApp\BartenderApp\obj\Debug\net10.0\compressed\o9mhlakm29-{0}-k3j4l3cr4l-k3j4l3cr4l.gz
