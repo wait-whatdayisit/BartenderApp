@@ -10,6 +10,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=app.db"));
 
+// Register OrderQueue in-memory
+builder.Services.AddSingleton<OrderQueue>();
+
 var app = builder.Build();
 
 // Seed the database
