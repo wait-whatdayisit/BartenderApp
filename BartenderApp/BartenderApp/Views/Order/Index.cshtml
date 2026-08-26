@@ -9,7 +9,7 @@
 <div style="position: fixed; top: 20px; right: 20px; border: 1px solid #ddd; border-radius: 12px; padding: 20px; background: white; min-width: 200px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
     <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: #666;">Items: <span id="order-items">0</span></div>
     <div style="font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 500;">Total: <span id="order-total">$0.00</span></div>
-    <a asp-controller="Order" asp-action="" style="text-align: center; padding: 10px; border: 1px solid #333; border-radius: 8px; text-decoration: none; color: #333; font-family: 'Inter', sans-serif; font-size: 13px;">Place Order</a>
+    <button onclick="checkout()" style="text-align: center; padding: 10px; border: 1px solid #333; border-radius: 8px; text-decoration: none; color: #333; font-family: 'Inter', sans-serif; font-size: 13px;">Place Order</button>
     <button class="alert-danger" onclick="clearCart()" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: none; color: darkred; font-family: 'Inter', sans-serif; font-size: 13px; cursor: pointer;">Clear Cart</button>
 </div>
 
@@ -63,6 +63,33 @@
     function clearCart() {
         document.querySelectorAll('.qty').forEach(span => span.textContent = '0');
         updateTotal();
+    }
+
+    async function checkout() {
+        const cards = document.querySelectorAll('.drink-card');
+        const items = [];
+
+        cards.forEach(card => {
+            const qty = parseInt(card.querySelector('.qty').textContent);
+            if (qty > 0) {
+                items.push({
+                    drinkName: card.querySelector('.drink-name').textContent,
+                    price: parseFloat(card.dataset.price),
+                    quantity: qty
+                });
+            }
+        });
+
+        if (items.length === 0) return;
+
+        await fetch('/Order/Checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(items)
+        });
+
+        clearCart();
+        alert('Order placed!');
     }
 </script>
 

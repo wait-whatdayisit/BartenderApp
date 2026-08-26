@@ -1,0 +1,51 @@
+﻿@model IReadOnlyList<BartenderApp.Models.Order>
+
+@{
+    ViewData["Title"] = "Bartender Queue";
+}
+
+<h1>Order Queue</h1>
+
+@if (!Model.Any())
+{
+    <p>No orders yet.</p>
+}
+
+@foreach (var order in Model.Where(o => !o.IsComplete))
+{
+    <div style="border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+        <p><strong>Order #@order.Id</strong> - @order.PlacedAt.ToString("h:mm:ss tt")</p>
+        <ul>
+            @foreach (var item in order.Items)
+            {
+                <li>@item.Quantity x @item.DrinkName - $@((item.Price * item.Quantity).ToString("0.00"))</li>
+            }
+        </ul>
+        <form asp-action="Complete" asp-route-id="@order.Id" method="post" style="display:inline;">
+            <button type="submit">Mark Complete</button>
+        </form>
+        <form asp-action="Remove" asp-route-id="@order.Id" method="post" style="display:inline;">
+            <button type="submit">Remove</button>
+        </form>
+    </div>
+}
+
+@if (Model.Any(o => o.IsComplete))
+{
+    <h2>Completed</h2>
+    @foreach (var order in Model.Where(o => o.IsComplete))
+    {
+        <div style="border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-bottom: 12px; opacity: 0.5;">
+            <p><strong>Order #@order.Id</strong> — @order.PlacedAt.ToString("h:mm:ss tt")</p>
+            <ul>
+                @foreach (var item in order.Items)
+                {
+                    <li>@item.Quantity x @item.DrinkName</li>
+                }
+            </ul>
+            <form asp-action="Remove" asp-route-id="@order.Id" method="post">
+                <button type="submit">Remove</button>
+            </form>
+        </div>
+    }
+}
