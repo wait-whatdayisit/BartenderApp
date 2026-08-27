@@ -1,11 +1,31 @@
+using BartenderApp.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// REGISTER DATABASE
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=app.db"));
+
+// Register OrderQueue in-memory
+builder.Services.AddSingleton<OrderQueue>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+    Console.WriteLine($"Drink count before seed: {context.Drinks.Count()}"); //
+    DbSeeder.Seed(context);
+    Console.WriteLine($"Drink count after seed: {context.Drinks.Count()}"); //
+}
+
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -21,8 +41,8 @@ app.UseAuthorization();
 app.MapStaticAssets();
 
 app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
